@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # 🗄️ PostgreSQL Database
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ellatech
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # 🚀 NestJS API Service
+  api:
+    build: .
+    container_name: ellatech-backend-api
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: '1'
+      WATCHPACK_POLLING: 'true'
+      TSC_WATCHFILE: DynamicPriorityPolling
+      TSC_WATCHDIRECTORY: DynamicPriorityPolling
+    ports:
+      - '3000:3000'
+    command: pnpm run start:dev
+    volumes:
+      - .:/usr/src/app:delegated # 🔥Mount local code inside the container
+      - /usr/src/app/node_modules # Prevent overwriting node_modules
+
+  # 🧭 pgAdmin Web GUI for managing the database
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ellatech-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # login email
+      PGADMIN_DEFAULT_PASSWORD: admin # login password
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmin-data:
