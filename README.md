@@ -117,7 +117,6 @@ TypeORM `synchronize` is enabled for convenience.
 
 - Hash user passwords before saving and omit them from responses.
 - Add pagination & filters to `/transactions` (DTO already exists).
-- Replace `synchronize: true` with migrations and seed scripts.
 
 ---
 
