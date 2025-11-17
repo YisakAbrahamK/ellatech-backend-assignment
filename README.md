@@ -115,6 +115,7 @@ TypeORM `synchronize` is enabled for convenience.
 
 ## Next Steps / Ideas
 
+- Authentication.
 - Hash user passwords before saving and omit them from responses.
 - Add pagination & filters to `/transactions` (DTO already exists).
 
